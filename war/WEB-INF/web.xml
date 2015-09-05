@@ -18,7 +18,7 @@
 		<!-- Register resources and providers under com.vogella.jersey.first package. -->
 		<init-param>
 			<param-name>jersey.config.server.provider.packages</param-name>
-			<param-value>com.guides</param-value>
+			<param-value>com.guides.services</param-value>
 		</init-param>
 		<init-param>
 			<param-name>jersey.config.server.provider.classnames</param-name>
