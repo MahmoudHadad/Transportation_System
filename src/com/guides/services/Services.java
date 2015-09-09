@@ -37,14 +37,28 @@ public class Services {
 	
 	@POST
 	@Path("/getNearestStation")
-	@Produces("text/html")
-	public JSONObject getNearestStation(@FormParam("userLatitude") String userLatitude, 
+	public String getNearestStation(@FormParam("userLatitude") String userLatitude, 
 			@FormParam("userLongitude") String userLongitude ) {
 		 
+		JSONObject resultJSON = getNearestStationJson(userLatitude,
+				userLongitude);  
+		return resultJSON.toJSONString();
+	}
+
+	private JSONObject getNearestStationJson(String userLatitude,
+			String userLongitude) {
 		Entity selectedStation = StationDS.getNearestStation(userLatitude,
 				userLongitude);
 		
-		JSONObject resultJSON = StationDS.getStationJSON(selectedStation);  
+		JSONObject resultJSON = StationDS.getStationJSON(selectedStation);
 		return resultJSON;
+	}
+	
+	@Path("/test2")
+	@GET
+	public Response test2(){
+		logger.warning("In Test");
+		return Response.ok(new Viewable("/Test")).build();
+		
 	}
 }

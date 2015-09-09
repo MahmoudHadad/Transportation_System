@@ -10,7 +10,24 @@
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
 	
-  
+		<servlet>
+		<servlet-name>Controller</servlet-name>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+		<!-- Register resources and providers under com.vogella.jersey.first package. -->
+		<init-param>
+			<param-name>jersey.config.server.provider.packages</param-name>
+			<param-value>com.guides.controllers</param-value>
+		</init-param>
+		<init-param>
+			<param-name>jersey.config.server.provider.classnames</param-name>
+			<param-value>org.glassfish.jersey.server.mvc.jsp.JspMvcFeature</param-value>
+		</init-param>
+		
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Controller</servlet-name>
+		<url-pattern>/Test/*</url-pattern>
+	</servlet-mapping>  
   
 	<servlet>
 		<servlet-name>Web Services</servlet-name>
@@ -31,5 +48,8 @@
 		<url-pattern>/API/*</url-pattern>
 	</servlet-mapping>
 	
+
+
 	
+		
 </web-app>

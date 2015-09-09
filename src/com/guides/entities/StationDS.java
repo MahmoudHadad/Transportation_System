@@ -51,7 +51,7 @@ public class StationDS {
 		double lat2 = Math.toRadians(Double.parseDouble(latitude2));
 		double deltaLat = Math.toRadians(Double.parseDouble(latitude2)
 				- Double.parseDouble(latitude1));
-		;
+
 		double deltaLon = Math.toRadians(Double.parseDouble(longitude2)
 				- Double.parseDouble(longitude1));
 
@@ -66,55 +66,55 @@ public class StationDS {
 	}
 
 	// ////////////////////////////////////////////////////////////////////
-	
-	public static JSONObject getStationInfo(String source,String distination){
-		 
+
+	public static JSONObject getStationInfo(String source, String distination) {
+
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
- 
-	    JSONObject infoJSON = new JSONObject(); 
-	    JSONObject stationJson = new JSONObject();
- 
-		long sourceline = 0,distinationline= 0,numberOfStations = 0,estimatedTime = 0;
+
+		JSONObject infoJSON = new JSONObject();
+		JSONObject stationJson = new JSONObject();
+
+		long sourceline = 0, distinationline = 0, numberOfStations = 0, estimatedTime = 0;
 		Direction direction;
- 
-		Filter propertyFilter1 =
-				  new FilterPredicate("name",FilterOperator.EQUAL,source);
+
+		Filter propertyFilter1 = new FilterPredicate("name",
+				FilterOperator.EQUAL, source);
 		Query q1 = new Query("stations").setFilter(propertyFilter1);
 		PreparedQuery pq1 = datastore.prepare(q1);
 		Entity sourceEntity = pq1.asSingleEntity();
 		String line1 = sourceEntity.getProperty("line").toString();
- 
-		Filter propertyFilter2 =
-				  new FilterPredicate("name",FilterOperator.EQUAL,distination);
+
+		Filter propertyFilter2 = new FilterPredicate("name",
+				FilterOperator.EQUAL, distination);
 		Query q2 = new Query("stations").setFilter(propertyFilter2);
 		PreparedQuery pq2 = datastore.prepare(q2);
 		Entity distinationEntity = pq2.asSingleEntity();
 		String line2 = distinationEntity.getProperty("line").toString();
- 
+
 		stationJson = getStationJSON(distinationEntity);
- 
-	sourceline = Long.parseLong(line1);
-	distinationline = Long.parseLong(line2);
- 
-	if(sourceline > distinationline){
-		numberOfStations = sourceline - distinationline;
-		 direction = Direction.Monib_Direction;
-	}
-	else{
-		numberOfStations = distinationline - sourceline;
-		 direction = Direction.Shoubra_Direction;
-	}
+
+		sourceline = Long.parseLong(line1);
+		distinationline = Long.parseLong(line2);
+
+		if (sourceline > distinationline) {
+			numberOfStations = sourceline - distinationline;
+			direction = Direction.Monib_Direction;
+		} else {
+			numberOfStations = distinationline - sourceline;
+			direction = Direction.Shoubra_Direction;
+		}
 		estimatedTime = 3 * numberOfStations;
- 
+
 		infoJSON.put("estimatedTime", estimatedTime);
 		infoJSON.put("numberOfStation", numberOfStations);
 		infoJSON.put("direction", direction);
 		infoJSON.put("distination", stationJson);
- 
+
 		return infoJSON;
- }
-	/////////////////////////////////////////////////////////////////////
+	}
+
+	// ///////////////////////////////////////////////////////////////////
 	public static JSONObject getStationJSON(Entity stationEntity) {
 		JSONObject resultJSON = new JSONObject();
 
@@ -131,6 +131,6 @@ public class StationDS {
 
 		return resultJSON;
 	}
-	//////////////////////////////////////////////////////////////////////
-	
+	// ////////////////////////////////////////////////////////////////////
+
 }
