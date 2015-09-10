@@ -14,7 +14,7 @@ public class Connection {
 			String methodType, String contentType) {
 			//	String serverPath = "";  //online url
 				String serverPath = "http://localhost:8888/";	 //local url
-		try {
+		try { 
 			URL url = new URL(serverPath + serviceUrl);
 			HttpURLConnection connection = (HttpURLConnection) url
 					.openConnection();
