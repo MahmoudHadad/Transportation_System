@@ -16,12 +16,12 @@ import com.google.appengine.api.appidentity.AppIdentityService.ParsedAppId;
 import com.guides.models.Station;
 import com.guides.services.Services;
 
-public class ReadCVS {
+public class ReadCSV {
 	private static final Logger logger = Logger.getLogger(Services.class
 			.getCanonicalName());
 	
 	
-	public static void readfiles() throws IOException {
+	public static void readfile() throws IOException {
 
 		logger.warning("in readfiles");
 		CsvReader csvReader = new CsvReader("MetroStations.csv", ',',
@@ -39,20 +39,21 @@ public class ReadCVS {
 		while (csvReader.readRecord()) {
 			Station s = new Station();
 			s.setStationName(csvReader.get("StationName"));
-			System.out.println(s.toString());
-//			s.setDistrict(csvReader.get(""));
-//			s.setArea(csvReader.get(""));
-//			s.setLatitude(Double.parseDouble(csvReader.get("Latitude")));
-//			s.setLongitude(Double.parseDouble(csvReader.get("")));
-//			s.setLine1(Integer.parseInt(csvReader.get("")));
-//			s.setLine2(Integer.parseInt(csvReader.get("")));
-//			s.setLine3(Integer.parseInt(csvReader.get("")));
-//			s.setLine4(Integer.parseInt(csvReader.get("")));
-//			s.setLocations(csvReader.get(""));
+			
+			s.setDistrict(csvReader.get("District"));
+			s.setArea(csvReader.get("Area"));
+			s.setLatitude(Double.parseDouble(csvReader.get("Latitude")));
+			s.setLongitude(Double.parseDouble(csvReader.get("Longitude")));
+			s.setLine1(Integer.parseInt(csvReader.get("Line1")));
+			s.setLine2(Integer.parseInt(csvReader.get("Line2")));
+			s.setLine3(Integer.parseInt(csvReader.get("Line3")));
+			s.setLine4(Integer.parseInt(csvReader.get("Line4")));
+			s.setLocations(csvReader.get("Locations"));
 
 			Boolean b = DatastoreManager.insertStation(s);
 
 			System.out.println(b + " :true");
+			
 //			if (!c.get("Latitude").isEmpty()) {
 //				Latitude = Double.parseDouble();
 //			}

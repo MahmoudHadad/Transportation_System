@@ -1,17 +1,17 @@
 package com.guides.models;
 //model or java beans
 public class Station {
-	private String Id;
-	private String StationName ;
-	private String District ;
-	private String Area ;
-	private double Latitude;
-	private double Longitude ;
-	private int Line1; 
-	private int Line2; 
-	private int Line3; 
-	private int Line4; 
-	private String Locations;
+	public String Id;
+	public String StationName ;
+	public String District ;
+	public String Area ;
+	public double Latitude;
+	public double Longitude ;
+	public int Line1; 
+	public int Line2; 
+	public int Line3; 
+	public int Line4; 
+	public String Locations;
 	public String getStationName() {
 	return StationName;
 	}

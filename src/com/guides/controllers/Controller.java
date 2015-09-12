@@ -14,7 +14,7 @@ import org.glassfish.jersey.server.mvc.Viewable;
 import org.json.simple.JSONObject;
 
 import com.google.appengine.api.datastore.Entity;
-import com.guides.entities.StationDS;
+import com.guides.utilites.Utilities;
 
 
 @Path("/")
@@ -32,6 +32,20 @@ public class Controller {
 	public Response test(){
 		logger.warning("In Test");
 		return Response.ok(new Viewable("/Test")).build();
+		
+	}
+	@Path("getAllDistricts")
+	@POST
+	public String getAllDistricts() {
+		
+		return "Cairo|Giza|Asuan|Sues";
+		
+	}
+	@Path("getAreas")
+	@POST
+	public String getAreas(@FormParam("districtName") String districtName) {
+		
+		return districtName;
 		
 	}
 	

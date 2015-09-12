@@ -27,7 +27,7 @@ public class DatastoreManager {
 			DatastoreService datastore = DatastoreServiceFactory
 					.getDatastoreService();
 			
-			Entity myStation = new Entity("Station");
+			Entity myStation = new Entity("MetroStations");
 			
 			
 			myStation.setProperty("StationName", station.getStationName());
@@ -37,8 +37,8 @@ public class DatastoreManager {
 			myStation.setProperty("Longitude", station.getLongitude());
 			myStation.setProperty("Line1", station.getLine1());
 			myStation.setProperty("Line2", station.getLine2());
-			myStation.setProperty("Line3", station.getLine2());
-			myStation.setProperty("Line4", station.getLine2());
+			myStation.setProperty("Line3", station.getLine3());
+			myStation.setProperty("Line4", station.getLine4());
 			myStation.setProperty("Locations", station.getLocations());
 			datastore.put(myStation);
 			station.setId(String.valueOf(myStation.getKey().getId()));
@@ -50,7 +50,7 @@ public class DatastoreManager {
 			DatastoreService datastore = DatastoreServiceFactory
 					.getDatastoreService();
 			// delete old data from datastore
-			Query hashTageQuery = new Query("Station");
+			Query hashTageQuery = new Query("MetroStations");
 			PreparedQuery pq = datastore.prepare(hashTageQuery);
 				
 			for(Entity e : pq.asIterable())

@@ -1,27 +1,122 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<!-- The HTML 4.01 Transitional DOCTYPE declaration-->
-<!-- above set at the top of the file will set     -->
-<!-- the browser's rendering engine into           -->
-<!-- "Quirks Mode". Replacing this declaration     -->
-<!-- with a "Standards Mode" doctype is supported, -->
-<!-- but may lead to some differences in layout.   -->
-
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Hello App Engine</title>
-  </head>
 
-  <body>
-    <h1>Hello App Engine!</h1>
-	
-    <table>
-      <tr>
-        <td colspan="2" style="font-weight:bold;">Available Servlets:</td>        
-      </tr>
-      <tr>
-        <td><a href="transportation_system">Transportation_System</a></td>
-      </tr>
-    </table>
-  </body>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+    <div>
+        <input type="hidden" id="sourceLatitude">
+        <input type="hidden" id="sourceLongitude">
+    </div>
+
+    Destination
+    <br> District
+    <select id="districtSelect">
+    </select>
+    <br> Area
+    <select id="areaSelect">
+    </select>
+    <br>
+    <br> Source
+    <br>
+    <input type="radio" name="sourceInput" value="currentPosition" checked> Current
+    <br>
+    <input type="radio" name="sourceInput" value="customPosition"> Custome
+    <br>
+
+    <div id="sourceCustomePosition" style="display: none">
+        <br> District
+        <select id="districtSelect">
+        </select>
+        <br> Area
+        <select id="areaSelect">
+        </select>
+    </div>
+	<button id="routingButton">Go</button>
+
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <script>
+        var currentPosition = null;
+        var updateCurrentPosition = function() {
+        	currentPosition = null;
+                navigator.geolocation.getCurrentPosition(function(
+                    position) {
+                	currentPosition = position;
+                });
+            }
+            //     var fn = function(){
+            //     	if(sourcePosition == null ) {
+            //     		console.log("null");
+            //     	}
+            //     	else {
+            //     		console.log(sourcePosition.coords.latitude);
+            //     		console.log(sourcePosition.coords.longitude);
+            //     	}
+            //     };
+        $(document)
+            .ready(
+                function() {
+                    //update source position 
+                    updateCurrentPosition();
+
+                    //load all districts
+                    $.post( "API/getAllDistricts",
+                        function(data) {
+                            $("#districtSelect") .empty();
+                            console.log(data);
+                            var districs = JSON .parse(data)["districts"];
+                            for (var i = 0; i < districs.length; i++)
+                                $( "#districtSelect") .append( "<option value=" + districs[i]+ ">" + districs[i] + "</option>");
+                        });
+                });
+
+        //load areas of district
+        $("#districtSelect").change(
+            function() {
+                $("#areaSelect").empty();
+                $.post("API/getAreas", {
+                    districtName: $("#districtSelect").val()
+                }, function(data) {
+                	console.log(data);
+                    var areas = JSON.parse(data)["areas"];
+                    for (var i = 0; i < areas.length; i++)
+                        $("#areaSelect").append(
+                            "<option value=" + areas[i]["Area"] + ">" + areas[i]["Area"]  + "</option>");
+
+                });
+            });
+
+        //change source method
+        $("input[name='sourceInput']").change(function() {
+            //current 
+            if ($(this).val() == "currentPosition") {
+                $("#sourceCustomePosition").slideUp("slow");
+                updateCurrentPosition();
+            }
+            //custom
+            else {
+                $("#sourceCustomePosition").slideDown("slow");
+            }
+
+        });
+        
+        //find the route
+        $("#routingButton").click(function(){
+        	$.post("API/routingService",
+        		{
+        			StationName: $("#areaSelect").val(),
+        			userLatitude: currentPosition.coords.latitude,
+        			userMagnitude: currentPosition.coords.magnitude
+        		},
+        		function() {
+        			console.log(currentPosition.coords.latitude);
+        		}
+        	)
+        });
+        
+    </script>
+</body>
+
 </html>
