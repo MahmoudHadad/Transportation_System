@@ -160,8 +160,8 @@ public class Utilities {
 		estimatedTime = 3 * numberOfStations;
 
 		infoJSON.put("estimatedTime", estimatedTime);
-		infoJSON.put("numberOfStation", numberOfStations);
-		infoJSON.put("direction", direction);
+		infoJSON.put("numberOfStations", numberOfStations);
+		infoJSON.put("direction", direction.toString());
 		infoJSON.put("distination", stationJson);
 
 		return infoJSON;

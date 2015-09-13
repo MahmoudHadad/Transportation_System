@@ -1,0 +1,46 @@
+html { 
+margin: 0px;
+}
+body { 
+background-color: #526D75;
+background:url(../img/2.jpg) ;
+background-size: cover;
+}
+.bg { 
+background-color: #634D38;
+}
+.brand {
+	width: 70px;
+	height: 70px;
+	margin-top: -10px;
+}
+.container-fluid {
+margin: 0px;
+}
+.navbar{ 
+border-radius: 0px;
+border:0px;
+}
+.title {
+display: inline-block; 
+text-align: center;
+color: white;
+}
+.div-style { 
+background-color:rgba(255,255,255,0.35);
+}
+.source-div{ 
+	color: white;
+padding:10px;
+margin: 20px;
+}
+.area-div {
+	padding:10px;
+	margin:20px;
+	font-size:20px;
+}
+.styyyle {
+	color: white ;
+	padding-bottom:10px; 
+	
+}

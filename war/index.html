@@ -3,42 +3,132 @@
 
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta charset="UTF-8">
+<meta name="description" content="...">
+<meta name="keywords" content="">
+<meta name="author" content="">
+    <link href="css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 
 <body>
-    <div>
-        <input type="hidden" id="sourceLatitude">
-        <input type="hidden" id="sourceLongitude">
+<nav class="navbar navbar-default bg">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">
+        <img alt="Brand" class="brand" src="img/logo.png">
+      </a>
     </div>
-
-    Destination
-    <br> District
+    <div class="center-block title">
+      <h1>Transportation Guide System</h1>
+      </div>
+  </div>
+</nav>
+<div class="container-fluid">
+  <div class="background-edition">
+    <div class="col-lg-12 col-md-8 col-sm-8 col-xs-8">
+        <div id="wait" class="wait" style="position:fixed;top:45%;left:45%">
+            <i class="fa fa-spinner fa-pulse fa-4x"></i>
+        </div>
+        	<div class="div-style">
+	<div class="row">
+	<div class="col-lg-6 col-md-6 col-sm-6">
+    <div class="source-div">
+    <h3>Source</h3>
+    <br>
+    <input type="radio" name="sourceInput" value="currentPosition" checked> Current
+    <br>
+    <input type="radio" name="sourceInput" value="customPosition" disabled> Custome
+    <br>
+        <div id="sourceCustomePosition" style="display: none">
+        <br> <em>District</em>
+        <select id="sourceDistrictSelect">
+        </select>
+        <em>Area</em>
+        <select id="sourceAreaSelect">
+        </select>
+    </div>
+    	</div>
+	</div>
+    <br>
+    <div class="col-lg-6 col-md-6 col-sm-6">
+    <h3>Destination</h3>
+    <br>
+     District
     <select id="districtSelect">
     </select>
     <br> Area
     <select id="areaSelect">
     </select>
     <br>
-    <br> Source
-    <br>
-    <input type="radio" name="sourceInput" value="currentPosition" checked> Current
-    <br>
-    <input type="radio" name="sourceInput" value="customPosition"> Custome
-    <br>
-
-    <div id="sourceCustomePosition" style="display: none">
-        <br> District
-        <select id="districtSelect">
-        </select>
-        <br> Area
-        <select id="areaSelect">
-        </select>
     </div>
-	<button id="routingButton">Go</button>
+    </div>
+    <div class="row">
+	
+	<div class="area-div">
+	<div class="col-lg-6 col-md-6 col-sm-6">
+	<div id="AreaDescription">
 
+		<br>
+		Station Name: <span id="stationName"></span>
+		<br>
+		Near Locations: <span id="locations"></span>
+		<br>
+	</div>
+	
+	
+
+
+	<button id="routingButton">Go</button>
+	</div>
+	</div>
+	
+	<div class="col-lg-6 col-md-6 styyyle">
+		<div id="DestinationDescription" style="display:none; padding:10px; margin:10px; font-size:20px; color:white;">
+		Nearest Station: <span id="nearestStation"></span>	
+		<br>
+		---
+		<br>
+		Direction:<span id="direction"></span>
+		<br>
+		Number Of Stations:<span id="numberOfStations"></span>
+		<br>
+		Estimated Time:<span id="estimatedTime"></span>
+	</div>
+	</div>
+	</div>
+</div>
+</div>
+    </div>
+  </div>
     <script src="js/jquery-1.11.3.min.js"></script>
     <script>
-        var currentPosition = null;
+    var districts, area, currentPosition = null;;
+	function loadArea() {
+		$("#DestinationDescription").fadeOut("slow");
+		var areaIndex = $("#areaSelect").val();  
+		$("#stationName").empty().append(areas[areaIndex]["StationName"]);
+		$("#locations").empty().append(areas[areaIndex]["Locations"]);
+	}
+    function loadAreas() {
+    	console.log( $("#districtSelect").val());
+    	
+    	$("#areaSelect").empty();
+        $.post("API/getAreas", {
+            districtName: $("#districtSelect").val()
+        }, function(data) { 
+             areas = JSON.parse(data)["areas"];
+            for (var i = 0; i < areas.length; i++)
+                $("#areaSelect").append(
+                    "<option value='"+i+"' >" + areas[i]["Area"]  + "</option>"); //value refer to areas array index
+            loadArea();
+        });
+    }
+        
         var updateCurrentPosition = function() {
         	currentPosition = null;
                 navigator.geolocation.getCurrentPosition(function(
@@ -46,47 +136,25 @@
                 	currentPosition = position;
                 });
             }
-            //     var fn = function(){
-            //     	if(sourcePosition == null ) {
-            //     		console.log("null");
-            //     	}
-            //     	else {
-            //     		console.log(sourcePosition.coords.latitude);
-            //     		console.log(sourcePosition.coords.longitude);
-            //     	}
-            //     };
-        $(document)
-            .ready(
-                function() {
+ 
+        $(document).ready( function() {
                     //update source position 
                     updateCurrentPosition();
 
                     //load all districts
                     $.post( "API/getAllDistricts",
                         function(data) {
-                            $("#districtSelect") .empty();
-                            console.log(data);
-                            var districs = JSON .parse(data)["districts"];
+                            $("#districtSelect") .empty(); 
+                             districs = JSON .parse(data)["districts"];
                             for (var i = 0; i < districs.length; i++)
-                                $( "#districtSelect") .append( "<option value=" + districs[i]+ ">" + districs[i] + "</option>");
-                        });
+                                $( "#districtSelect") .append( "<option value='" + districs[i]+ "'>" + districs[i] + "</option>");
+                            loadAreas();   
+                    });   
                 });
 
         //load areas of district
-        $("#districtSelect").change(
-            function() {
-                $("#areaSelect").empty();
-                $.post("API/getAreas", {
-                    districtName: $("#districtSelect").val()
-                }, function(data) {
-                	console.log(data);
-                    var areas = JSON.parse(data)["areas"];
-                    for (var i = 0; i < areas.length; i++)
-                        $("#areaSelect").append(
-                            "<option value=" + areas[i]["Area"] + ">" + areas[i]["Area"]  + "</option>");
 
-                });
-            });
+        $("#districtSelect").change(loadAreas);
 
         //change source method
         $("input[name='sourceInput']").change(function() {
@@ -101,21 +169,48 @@
             }
 
         });
-        
+        $("#areaSelect ").change(function(){
+        	console.log("test " + $("#areaSelect").val());
+        });
         //find the route
         $("#routingButton").click(function(){
-        	$.post("API/routingService",
-        		{
-        			StationName: $("#areaSelect").val(),
-        			userLatitude: currentPosition.coords.latitude,
-        			userMagnitude: currentPosition.coords.magnitude
-        		},
-        		function() {
-        			console.log(currentPosition.coords.latitude);
-        		}
-        	)
+    		if(currentPosition === null ) {
+    			alert("Error Loading Your Location")
+    		}
+    		else {
+            	$.post("API/routing",
+                		{
+                		StationName: $("#stationName").text(),
+                		Latitude: currentPosition.coords.latitude,
+                		Longitude: currentPosition.coords.longitude
+                		},
+                		function(data) { 
+                			var result = JSON .parse(data); 
+                			console.log(result);
+                			$("#nearestStation").text(result["nearestStation"]["StationName"]);
+                			$("#direction").text(result["direction"]);
+                			$("#numberOfStations").text(result["numberOfStations"] + " Stations");
+                			$("#estimatedTime").text(result["estimatedTime"]+ "Minutes");
+                			$("#DestinationDescription").fadeIn("slow");
+                		}
+                	);	
+    		}
+
         });
         
+        $("#areaSelect").change(function(){
+        	
+        	loadArea();
+        });
+        
+        $(document).ajaxStart(function () {
+            $('#wait').show();
+            $("#routingButton").attr("disabled",true);
+        }).ajaxComplete(function () {
+            $('#wait').hide();
+            $("#routingButton").attr("disabled",false);
+        });
+
     </script>
 </body>
 

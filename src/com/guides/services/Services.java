@@ -59,7 +59,7 @@ public class Services {
 		System.out.println(source.toJSONString());
 		JSONObject StationInfo = Utilities.getStationInfo((String)source.get("StationName") , destination);
 		System.out.println(StationInfo.toJSONString());
-		StationInfo.put("nearsetStation", source);
+		StationInfo.put("nearestStation", source);
 		return StationInfo.toJSONString();
 	}
 	@POST
@@ -100,7 +100,7 @@ public class Services {
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
 	public static String getAreasService(@FormParam("districtName") String districtName){
-		   JSONObject object = new JSONObject();
+		   JSONObject object = new JSONObject(); 
 		    object.put("areas",Utilities.getAreas(districtName) );
 		    return object.toJSONString();
 	    
